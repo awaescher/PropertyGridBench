@@ -5,3 +5,9 @@ A test repository to bench the DevExpress PropertyGridControl in different versi
 
 ![Performance comparison](Comparison.gif)
 
+#### Update 19.08.2019:
+
+Updated to DevExpress 19.1.5 which makes the initial load much faster than in every single version since 17.1.5 - nearly as fast as 17.1.5 itself.
+Filtering however, is still unusable (cancelled after 40s video).
+
+![Performance comparison 19.1.5](Comparison1915.gif)
