@@ -2,13 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using DevExpress.XtraVerticalGrid.Data;
+using DevExpress.XtraVerticalGrid;
 using DevExpress.XtraVerticalGrid.Events;
+using DevExpress.XtraVerticalGrid.Rows;
 
 namespace PropertyGridBench
 {
@@ -71,6 +69,43 @@ namespace PropertyGridBench
 				}
 			}
 		}
+
+		internal bool GetIsFiltered()
+		{
+			if (InvokeRequired)
+				return (bool)Invoke(new Func<bool>(() => GetIsFiltered()));
+
+			return !string.IsNullOrEmpty(FindFilterText);
+		}
+
+		protected override GetVisibleRowsRowOperation CreateGetVisibleRowsOperation()
+		{
+			if (EnableFilterWorkaround)
+			{
+				if (GetIsFiltered())
+					return new ParentRowsRowOperation(this);
+				else
+					return base.CreateGetVisibleRowsOperation();
+			}
+
+			return base.CreateGetVisibleRowsOperation();
+		}
+
+		public class ParentRowsRowOperation : FilterRowPropertiesOperation
+		{
+			public ParentRowsRowOperation(VGridControlBase vGrid)
+				: base(vGrid)
+			{
+			}
+
+			protected override IEnumerable<BaseRow> GetFilteredChildren(BaseRow handle)
+			{
+				Console.WriteLine("Returned empty base row array.");
+				return new BaseRow[0];
+			}
+		}
+
+		public bool EnableFilterWorkaround { get; set; }
 	}
 
 	public class CustomPropertyDescriptor : PropertyDescriptor

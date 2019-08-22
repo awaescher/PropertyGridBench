@@ -30,5 +30,10 @@ namespace _1915
 			propertyGridControl1.SelectedObject = this;
 			label1.Text = $"Took {sw.ElapsedMilliseconds / 1000} seconds.";
 		}
+
+		private void ToggleFilterWorkaround_Toggled(object sender, EventArgs e)
+		{
+			propertyGridControl1.EnableFilterWorkaround = toggleFilterWorkaround.IsOn;
+		}
 	}
 }
